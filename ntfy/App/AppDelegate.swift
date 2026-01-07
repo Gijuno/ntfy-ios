@@ -5,6 +5,7 @@ import Firebase
 import FirebaseCore
 import FirebaseMessaging
 import CoreData
+import AVFoundation
 
 class AppDelegate: UIResponder, UIApplicationDelegate, ObservableObject {
     private let tag = "AppDelegate"
@@ -97,6 +98,11 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     ) {
         let userInfo = notification.request.content.userInfo
         Log.d(tag, "Notification received via userNotificationCenter(willPresent)", userInfo)
+        
+        if let message = Message.from(userInfo: userInfo) {
+            TTSManager.shared.speak(message.message)
+        }
+        
         completionHandler([[.banner, .sound]])
     }
     

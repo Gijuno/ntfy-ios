@@ -8,6 +8,9 @@ struct SettingsView: View {
     var body: some View {
         NavigationView {
             Form {
+                Section(header: Text("TTS")) {
+                    TTSSettingsView()
+                }
                 Section(
                     header: Text("General"),
                     footer: Text("When subscribing to new topics, this server will be used as a default.")
@@ -346,6 +349,17 @@ struct AboutView: View {
     private func open(url: String) {
         guard let url = URL(string: url) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+}
+
+struct TTSSettingsView: View {
+    @State private var ttsEnabled = TTSManager.shared.isEnabled
+    
+    var body: some View {
+        Toggle("Read notifications aloud", isOn: $ttsEnabled)
+            .onChange(of: ttsEnabled) { newValue in
+                TTSManager.shared.isEnabled = newValue
+            }
     }
 }
 
